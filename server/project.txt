@@ -1,0 +1,20 @@
+Private File On AWS
+│
+├── controllers/
+│   ├── fileController.js
+│
+├── models/
+│   ├── fileModel.js
+│
+├── routes/
+│   ├── fileRoutes.js
+│
+├── services/
+│   ├── awsService.js
+│
+├── config/
+│   ├── dbConfig.js
+│
+├── app.js
+├── .env
+└── package.json
