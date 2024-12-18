@@ -29,7 +29,7 @@ const generateUploadURL = async (key, contentType) => {
       Key: key,
       ContentType: contentType,
     });
-    return await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    return await getSignedUrl(s3Client, command, { expiresIn: 300 });
   } catch (error) {
     console.error(`Error generating upload URL for key: ${key}`, error);
     throw new Error("Failed to generate pre-signed upload URL.");
@@ -47,7 +47,7 @@ const generateAccessURL = async (key) => {
       Bucket: process.env.BUCKET_NAME,
       Key: key,
     });
-    return await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    return await getSignedUrl(s3Client, command, { expiresIn: 300 });
   } catch (error) {
     console.error(`Error generating access URL for key: ${key}`, error);
     throw new Error("Failed to generate pre-signed access URL.");
