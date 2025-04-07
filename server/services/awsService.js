@@ -7,7 +7,6 @@ const {
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-// AWS S3 Configuration
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -16,17 +15,14 @@ const s3Client = new S3Client({
   },
 });
 
-/**
- * Generate Pre-signed URL for Upload
- * @param {string} key - The name of the file in the S3 bucket.
- * @param {string} contentType - The MIME type of the file.
- * @returns {Promise<string>} - The pre-signed upload URL.
- */
-const generateUploadURL = async (key, contentType) => {
+
+const generateUploadURL = async (folderName,key, contentType) => {
   try {
+
+    const folderKey = `${folderName}/${key}`;
     const command = new PutObjectCommand({
       Bucket: process.env.BUCKET_NAME,
-      Key: key,
+      Key: folderKey,
       ContentType: contentType,
     });
     return await getSignedUrl(s3Client, command, { expiresIn: 300 });
@@ -36,16 +32,13 @@ const generateUploadURL = async (key, contentType) => {
   }
 };
 
-/**
- * Generate Pre-signed URL for Access
- * @param {string} key - The name of the file in the S3 bucket.
- * @returns {Promise<string>} - The pre-signed access URL.
- */
-const generateAccessURL = async (key) => {
+
+const generateAccessURL = async (folderName,key) => {
   try {
+    const folderKey = `${folderName}/${key}`;
     const command = new GetObjectCommand({
       Bucket: process.env.BUCKET_NAME,
-      Key: key,
+      Key: folderKey,
     });
     return await getSignedUrl(s3Client, command, { expiresIn: 300 });
   } catch (error) {
@@ -54,11 +47,7 @@ const generateAccessURL = async (key) => {
   }
 };
 
-/**
- * Delete a File from S3
- * @param {string} key - The name of the file in the S3 bucket.
- * @returns {Promise<void>} - Confirmation of the file deletion.
- */
+
 const deleteFileFromS3 = async (key) => {
   try {
     const command = new DeleteObjectCommand({

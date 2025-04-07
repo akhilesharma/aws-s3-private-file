@@ -13,7 +13,9 @@ exports.getPreSignedUploadURL = async (req, res) => {
 
   try {
     const uniqueKey = `${Date.now()}_${key}`;
-    const uploadUrl = await generateUploadURL(uniqueKey, contentType);
+
+
+    const uploadUrl = await generateUploadURL("Chats", uniqueKey, contentType);
 
     res.status(201).json({
       success: true,
@@ -152,7 +154,7 @@ exports.getAllFiles = async (req, res) => {
     const filesWithAccessUrls = await Promise.all(
       files.map(async (file) => {
         try {
-          const accessUrl = await generateAccessURL(file.img);
+          const accessUrl = await generateAccessURL("Chats",file.img);
           return { ...file._doc, img: accessUrl };
         } catch (error) {
           console.error(`Error processing file: ${file.img}`, error);
